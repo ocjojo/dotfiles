@@ -1,10 +1,11 @@
 # use source .bash_profile to reload after changes
 
+### general aliases
 # retry last command with sudo
 alias fuck='sudo $(history -p \!\!)'
-
 # dotfiles mgmt
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias sb="source ~/.bash_profile"
 
 # allows inclusion of local aliases.
 # e.g. shortcuts for directories or ssh
