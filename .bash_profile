@@ -14,6 +14,8 @@ alias sa="sublime ~/.bash_aliases"
 # shortcut to resource bash_aliases/bash_profile
 alias sb="source ~/.bash_profile"
 alias ll="ls -lah"
+#shortcut to serve current dir as localhost
+alias serve="python -m SimpleHTTPServer 8000"
 
 # allows inclusion of local aliases.
 # e.g. shortcuts for directories or ssh
@@ -131,4 +133,6 @@ complete -F _comp g
 if [ $(uname) == "Darwin" ]; then
 	alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 	alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+    # shotcut for macdown
+    alias md="/Applications/MacDown.app/Contents/SharedSupport/bin/macdown $1 > /dev/null 2>/dev/null"
 fi
