@@ -1,5 +1,7 @@
 # use source .bash_profile to reload after changes
 
+[ -n "$BASH_PROFILE" ] && return || readonly BASH_PROFILE=1
+
 ### general aliases
 # retry last command with sudo
 alias fuck='sudo $(history -p \!\!)'
