@@ -34,20 +34,13 @@ add the following to your .bash_profile:
 ```bash
 # dotfiles mgmt
 dotfiles() {
-	for arg; do
-		if [[ "$arg" == "." ]]; then
-			local DOT="true"
-		fi
-		if [[ "$arg" == "add" ]]; then
-			local ADD="true"
-		fi
-	done
-
-	if [[ "$ADD" == "true" ]] && [[ "$DOT" == "true" ]]; then
+	if [[ "$1" == "add" ]] && [[ "$2" == "." ]]; then
 		# git add . only works on files already in the git tree
-		git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@ -u
+		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@ -u
+	elif [[ "$1" == "commit" ]] && [[ "$2" == "-m" ]]; then
+		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $1 $2 "$3"
 	else
-		git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 	fi
 }
 ```
