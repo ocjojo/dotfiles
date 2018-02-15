@@ -11,11 +11,21 @@ for editor in subl sublime code nano vim vi; do
 	fi
 done
 
+# dotfiles mgmt
+dotfiles() {
+	if [[ "$1" == "add" ]] && [[ "$2" == "." ]]; then
+		# git add . only works on files already in the git tree
+		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@ -u
+	elif [[ "$1" == "commit" ]] && [[ "$2" == "-m" ]]; then
+		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $1 $2 "$3"
+	else
+		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+	fi
+}
+
 ### general aliases
 # retry last command with sudo
 alias fuck='sudo $(history -p \!\!)'
-# dotfiles mgmt
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # shortcut to open current dir in editor
 alias ef="$EDITOR"
 alias ed="$EDITOR ."
