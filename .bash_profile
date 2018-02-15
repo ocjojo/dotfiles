@@ -1,19 +1,30 @@
 # use source .bash_profile to reload after changes
 
-[ -n "$BASH_PROFILE" ] && return || readonly BASH_PROFILE=1
+RED(){
+	echo -e "\033[0;31m$@\033[00m"
+}
+
+for editor in subl sublime code nano vim vi; do
+	if [ -n "$(${editor} --version 2>/dev/null)"  ]; then
+		EDITOR=$editor
+		break
+	fi
+done
 
 ### general aliases
 # retry last command with sudo
 alias fuck='sudo $(history -p \!\!)'
 # dotfiles mgmt
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-# shortcut to open current dir in sublime
-alias sd="sublime ."
+# shortcut to open current dir in editor
+alias ef="$EDITOR"
+alias ed="$EDITOR ."
+alias eda="$EDITOR . -a"
 # shortcut to edit bash_profile
-alias sp="sublime ~/.bash_profile"
+alias ep="$EDITOR ~/.bash_profile"
 # shortcut to edit bash aliases
-alias sa="sublime ~/.bash_aliases"
-# shortcut to resource bash_aliases/bash_profile
+alias ea="$EDITOR ~/.bash_aliases"
+# shortcut to source bash_aliases/bash_profile
 alias sb="source ~/.bash_profile"
 alias ll="ls -lah"
 #shortcut to serve current dir as localhost
@@ -34,7 +45,6 @@ fi
 
 # setup file to store bookmarks
 touch ~/.sdirs
-RED="0;31m"
 
 # save current directory to bookmarks
 function s {
@@ -55,9 +65,9 @@ function g {
     if [ -d "$target" ]; then
         cd "$target"
     elif [ ! -n "$target" ]; then
-        echo -e "\033[${RED}WARNING: '${1}' bashmark does not exist\033[00m"
+        RED "WARNING: '${1}' bashmark does not exist"
     else
-        echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
+        RED "WARNING: '${target}' does not exist"
     fi
 }
 

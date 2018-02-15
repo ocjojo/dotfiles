@@ -1,4 +1,5 @@
 {
 	"esnext": true,
-	"laxbreak": true
+	"laxbreak": true,
+	"asi": true
 }
