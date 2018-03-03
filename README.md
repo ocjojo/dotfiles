@@ -11,6 +11,14 @@ dotfiles commit -m "Added vimrc"
 dotfiles push
 ```
 
+### Aliases
+
+Local aliases can be added through `ea` (in .bash_aliases).
+
+These are not committed.
+
+You can also overwrite the default editor used by setting `EDITOR=path/to/editor`.
+
 ## Install from Repo
 ```bash
 # clone repo
@@ -29,26 +37,40 @@ dotfiles config --local status.showUntrackedFiles no
 ```bash
 git init --bare $HOME/.dotfiles
 ```
-add the following to your .bash_profile:
 
-```bash
-# dotfiles mgmt
-dotfiles() {
-	if [[ "$1" == "add" ]] && [[ "$2" == "." ]]; then
-		# git add . only works on files already in the git tree
-		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@ -u
-	elif [[ "$1" == "commit" ]] && [[ "$2" == "-m" ]]; then
-		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $1 $2 "$3"
-	else
-		/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
-	fi
-}
-```
-
+add the [dotfile function](.bash_profile#L21) to your .bash_profile.
 
 ```bash
 #source the new function
 source $HOME/.bash_profile
 # hide untracked files from status
 dotfiles config --local status.showUntrackedFiles no
+```
+
+## List of commands
+
+```bash
+fuck # retry last command with sudo
+
+ef <file> # open file in editor
+ed <dir> # open dir in editor
+eda <dir> # add dir to editor (-a option)
+
+ea # (e)dit .bash_(a)liases
+ep # (e)dit .bash_(p)rofile
+sb # (s)ource .(b)ash_profile
+
+ll # ls -lah
+
+serve # serve current dir from localhost:8000
+
+s <name> # save the current dir as name in bashmarks
+g <name> # go to a bashmark
+l # list all bashmarks
+
+dotfiles <command> # alias for git to commit changes in dotfiles repo
+
+# MacOS specific
+showFiles # show hidden files in finder
+hideFiles # hide hidden files in finder
 ```

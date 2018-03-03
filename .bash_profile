@@ -11,6 +11,12 @@ for editor in subl sublime code nano vim vi; do
 	fi
 done
 
+# allows inclusion of local aliases.
+# e.g. shortcuts for directories or ssh
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
 # dotfiles mgmt
 dotfiles() {
 	if [[ "$1" == "add" ]] && [[ "$2" == "." ]]; then
@@ -39,12 +45,6 @@ alias sb="source ~/.bash_profile"
 alias ll="ls -lah"
 #shortcut to serve current dir as localhost
 alias serve="python -m SimpleHTTPServer 8000"
-
-# allows inclusion of local aliases.
-# e.g. shortcuts for directories or ssh
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
 
 # Bashmarks from https://github.com/huyng/bashmarks (see copyright there)
 # USAGE: 
