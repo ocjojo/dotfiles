@@ -38,7 +38,7 @@ dotfiles config --local status.showUntrackedFiles no
 git init --bare $HOME/.dotfiles
 ```
 
-add the [dotfile function](.bash_profile#L21) to your .bash_profile.
+add the [dotfiles function](.bash_profile#L21) to your .bash_profile.
 
 ```bash
 #source the new function

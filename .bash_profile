@@ -1,10 +1,12 @@
 # use source .bash_profile to reload after changes
 
+export CLICOLOR=1
+
 RED(){
 	echo -e "\033[0;31m$@\033[00m"
 }
 
-for editor in subl sublime code nano vim vi; do
+for editor in code subl sublime nano vim vi; do
 	if [ -n "$(${editor} --version 2>/dev/null)"  ]; then
 		EDITOR=$editor
 		break
