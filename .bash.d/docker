@@ -1,0 +1,72 @@
+_dockerpath() {
+    local dockerdir=`pwd`;
+    while [[ "$dockerdir" != "/" ]];
+    do
+        if [ `find "$dockerdir" -maxdepth 1 -name docker-compose.yml` ];
+        then echo $dockerdir; return; fi;
+        dockerdir=`dirname "$dockerdir"`;
+    done
+    echo "";
+}
+
+_dockerdir() {
+    local dockerpath=$(_dockerpath);
+    echo ${dockerpath##*/};
+}
+
+_dockerproject() {
+    local dockerdir=$(_dockerdir);
+    echo ${dockerdir//-/};
+}
+
+function dobash() {
+    if [[ $1 == "help" ]]; then
+        echo '      Usage: 
+        dockerbash [container = web] [user = www-data]
+
+        dockerbash              - log into web container as www-data 
+        dockerbash root         - log into web container as root 
+        dockerbash mysql root   - log into mysql container as root'
+        return;
+    fi;
+    local container=${1:-web};
+    local user=${2:-www-data};
+    if [[ $container == "root" ]];
+        then container="web"; user="root";
+    fi;
+    docker exec -it -u=$user "${_dockerproject}_${container}_1" bash;
+}
+
+_docker_run_traefik() {
+    local network=${TRAEFIK_NETWOKR:-web};
+    local dcy="$TRAEFIK_DIR/docker-compose.yml";
+    if [[ ! -f "$dcy" ]]; then return; fi;
+
+    if [[ -n "$(docker network inspect $network 2>null | grep Error)" ]]; then
+        echo "Creating external network $network";
+        docker network create "$network";
+    fi;
+
+    if [[ -z "$(docker-compose -f $dcy ps 2>null | grep Up)" ]]; then
+        echo "Starting traefik";
+        _add_host "traefik.$TRAEFIK_DOMAIN";
+        docker-compose -f "$dcy" up -d;
+    fi;
+}
+
+_remove_host() {
+    if [ -z "$(grep "[[:space:]]$1" /etc/hosts)" ]; then return; fi;
+    sudo sed -ie "/[[:space:]]$1/d" "/etc/hosts";
+}
+
+_add_host() {
+    if [ -n "$(grep "[[:space:]]$1" /etc/hosts)" ]; then return; fi;
+    printf "%s\t%s\n" "127.0.0.1" "$1" | sudo tee -a "/etc/hosts" > /dev/null;
+}
+
+function dcu() {
+    _docker_run_traefik;
+    local dockerdir=$(_dockerdir);
+    _add_host "$dockerdir.$TRAEFIK_DOMAIN";
+    docker-compose up;
+}
