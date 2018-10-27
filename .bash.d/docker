@@ -1,3 +1,5 @@
+if [[ -z "$(docker-compose -v | grep 'docker-compose version')" ]]; then return; fi;
+
 _dockerpath() {
     local dockerdir=`pwd`;
     while [[ "$dockerdir" != "/" ]];
@@ -38,9 +40,9 @@ function dobash() {
 }
 
 _docker_run_traefik() {
-    local network=${TRAEFIK_NETWOKR:-web};
+    local network=${TRAEFIK_NETWORK:-web};
     local dcy="$TRAEFIK_DIR/docker-compose.yml";
-    if [[ ! -f "$dcy" ]]; then return; fi;
+    if [[ ! -f "$dcy" ]]; then echo "Set TRAEFIK_DIR to use traefik." return; fi;
 
     if [[ -n "$(docker network inspect $network 2>null | grep Error)" ]]; then
         echo "Creating external network $network";
@@ -64,7 +66,7 @@ _add_host() {
     printf "%s\t%s\n" "127.0.0.1" "$1" | sudo tee -a "/etc/hosts" > /dev/null;
 }
 
-function dcu() {
+function doup() {
     _docker_run_traefik;
     local dockerdir=$(_dockerdir);
     _add_host "$dockerdir.$TRAEFIK_DOMAIN";
