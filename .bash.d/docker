@@ -44,12 +44,12 @@ _docker_run_traefik() {
     local dcy="$TRAEFIK_DIR/docker-compose.yml";
     if [[ ! -f "$dcy" ]]; then echo "Set TRAEFIK_DIR to use traefik." return; fi;
 
-    if [[ -n "$(docker network inspect $network 2>null | grep Error)" ]]; then
+    if [[ -n "$(docker network inspect $network 2>/dev/null | grep Error)" ]]; then
         echo "Creating external network $network";
         docker network create "$network";
     fi;
 
-    if [[ -z "$(docker-compose -f $dcy ps 2>null | grep Up)" ]]; then
+    if [[ -z "$(docker-compose -f $dcy ps 2>/dev/null | grep Up)" ]]; then
         echo "Starting traefik";
         _add_host "traefik.$TRAEFIK_DOMAIN";
         docker-compose -f "$dcy" up -d;
