@@ -32,11 +32,11 @@ function dobash() {
         return;
     fi;
     local container=${1:-web};
-    local user=${2:-www-data};
+    local user=${2:-owl};
     if [[ $container == "root" ]];
         then container="web"; user="root";
     fi;
-    docker exec -it -u=$user "${_dockerproject}_${container}_1" bash;
+    docker-compose exec -u$user $container bash;
 }
 
 _docker_run_traefik() {
@@ -51,24 +51,11 @@ _docker_run_traefik() {
 
     if [[ -z "$(docker-compose -f $dcy ps 2>/dev/null | grep Up)" ]]; then
         echo "Starting traefik";
-        _add_host "traefik.$TRAEFIK_DOMAIN";
         docker-compose -f "$dcy" up -d;
     fi;
 }
 
-_remove_host() {
-    if [ -z "$(grep "[[:space:]]$1" /etc/hosts)" ]; then return; fi;
-    sudo sed -ie "/[[:space:]]$1/d" "/etc/hosts";
-}
-
-_add_host() {
-    if [ -n "$(grep "[[:space:]]$1" /etc/hosts)" ]; then return; fi;
-    printf "%s\t%s\n" "127.0.0.1" "$1" | sudo tee -a "/etc/hosts" > /dev/null;
-}
-
 function doup() {
     _docker_run_traefik;
-    local dockerdir=$(_dockerdir);
-    _add_host "$dockerdir.$TRAEFIK_DOMAIN";
     docker-compose up;
 }

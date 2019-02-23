@@ -42,12 +42,14 @@ dotfiles() {
 ### general aliases
 # retry last command with sudo
 alias fuck='sudo $(history -p \!\!)'
+
+alias explain='open "https://explainshell.com/explain?cmd=$(history -p \!\!)"'
 # shortcut to open current dir in editor
 alias ef="$EDITOR"
 alias ed="$EDITOR ."
 alias eda="$EDITOR . -a"
 # shortcut to edit bash_profile
-alias ep="$EDITOR $HOME/.bash_profile"
+alias ep="$EDITOR $HOME/.bash.d && $EDITOR $HOME/.bash_profile"
 # shortcut to edit bash aliases
 alias ea="$EDITOR $HOME/.bash_aliases"
 # shortcut to source bash_aliases/bash_profile
@@ -55,6 +57,7 @@ alias sb="source $HOME/.bash_profile"
 alias ll="ls -lah"
 #shortcut to serve current dir as localhost
 alias serve="python -m SimpleHTTPServer 8000"
+alias pubkey="cat ~/.ssh/id_rsa.pub"
 
 for file in $HOME/.bash.d/*; do
     source $file
