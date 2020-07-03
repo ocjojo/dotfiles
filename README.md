@@ -22,13 +22,16 @@ You can also overwrite the default editor used by setting `EDITOR=path/to/editor
 ## Install from Repo
 ```bash
 # clone repo
-git clone --bare <git-repo-url> $HOME/.dotfiles
+git clone --bare git@github.com:ocjojo/dotfiles.git $HOME/.dotfiles
 # checkout; you might have to delete files that already exist
-git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
-# source the new .bash_profile
-source $HOME/.bash_profile
+git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
 # hide untracked files from status
 dotfiles config --local status.showUntrackedFiles no
+
+# source the new .bash_profile
+source $HOME/.bash_profile
+# copy the iterm profile
+cp .iterm-profile.json Library/Application\ Support/iTerm2/DynamicProfiles/iterm-profile.json
 ```
 
 
